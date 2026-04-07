@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Alex Rivera · Full Stack Architect</title>
+  <!-- Google Fonts + Font Awesome + AOS -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --accent: #3b82f6;
+      --accent-glow: rgba(59,130,246,0.25);
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --shadow-sm: 0 10px 25px -5px rgba(0,0,0,0.05),0 8px 10px -6px rgba(0,0,0,0.02);
+      --shadow-md: 0 20px 25px -12px rgba(0,0,0,0.08);
+      --gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    }
+
+    body.dark {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --card-bg: #1e293b;
+      --border: #334155;
+      --shadow-sm: 0 10px 25px -5px rgba(0,0,0,0.3);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      transition: background 0.3s ease, color 0.2s ease;
+      scroll-behavior: smooth;
+    }
+
+    /* glassmorphism navbar */
+    .glass-nav {
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    body.dark .glass-nav {
+      background: rgba(15,23,42,0.8);
+    }
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      flex-wrap: wrap;
+    }
+    .logo {
+      font-weight: 800;
+      font-size: 1.6rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-primary);
+      font-weight: 500;
+      transition: 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .theme-toggle {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 3rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.8rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--gradient);
+      color: white;
+      box-shadow: 0 4px 14px var(--accent-glow);
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px -5px var(--accent-glow);
+    }
+    .btn-outline {
+      border: 1.5px solid var(--accent);
+      background: transparent;
+      color: var(--accent);
+    }
+    section {
+      padding: 5rem 0;
+    }
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      position: relative;
+      display: inline-block;
+    }
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 60%;
+      height: 4px;
+      background: var(--gradient);
+      border-radius: 4px;
+    }
+    /* hero */
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+    .hero-content h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+    }
+    .hero-content .highlight {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .typed-text {
+      font-size: 1.5rem;
+      margin: 1rem 0;
+      color: var(--text-secondary);
+    }
+    .profile-pic {
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: var(--shadow-md);
+      border: 4px solid var(--accent);
+    }
+    .status-badge {
+      background: #10b98120;
+      color: #10b981;
+      padding: 0.25rem 1rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-block;
+    }
+    /* skill bars */
+    .skill-item {
+      margin-bottom: 1.2rem;
+    }
+    .skill-info {
+      display: flex;
+      justify-content: space-between;
+    }
+    .skill-bar-bg {
+      background: var(--border);
+      height: 8px;
+      border-radius: 10px;
+      margin-top: 6px;
+      overflow: hidden;
+    }
+    .skill-bar-fill {
+      width: 0%;
+      height: 100%;
+      background: var(--gradient);
+      border-radius: 10px;
+      transition: width 1s ease;
+    }
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .project-card {
+      background: var(--card-bg);
+      border-radius: 1.5rem;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: all 0.3s;
+      box-shadow: var(--shadow-sm);
+    }
+    .project-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-md);
+    }
+    .project-img {
+      height: 180px;
+      background: linear-gradient(145deg, #3b82f6, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 3rem;
+    }
+    .project-content {
+      padding: 1.5rem;
+    }
+    .tech-tag {
+      background: var(--bg-secondary);
+      padding: 0.2rem 0.8rem;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      display: inline-block;
+      margin: 0.2rem;
+    }
+    .contact-form input, .contact-form textarea {
+      width: 100%;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      color: var(--text-primary);
+    }
+    .social-links a {
+      font-size: 1.8rem;
+      margin-right: 1rem;
+      color: var(--text-secondary);
+      transition: 0.2s;
+    }
+    .social-links a:hover { color: var(--accent); transform: scale(1.05);}
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 4px;
+      background: var(--gradient);
+      z-index: 10000;
+      transition: width 0.1s;
+    }
+    @media (max-width: 768px) {
+      .hero { flex-direction: column-reverse; text-align: center; }
+      .nav-links { gap: 1rem; }
+      .container { padding: 0 1.5rem; }
+    }
+    .floating-btn {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--accent);
+      width: 50px;
+      height: 50px;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      z-index: 99;
+    }
+  </style>
+</head>
+<body>
+<div class="scroll-progress" id="progressBar"></div>
+<div class="glass-nav">
+  <div class="container">
+    <nav>
+      <span class="logo">Alex.dev</span>
+      <div class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+        <button class="theme-toggle" id="darkModeToggle"><i class="fas fa-moon"></i> Mode</button>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<main>
+  <!-- Hero Section -->
+  <section id="home">
+    <div class="container hero" data-aos="fade-up">
+      <div class="hero-content">
+        <span class="status-badge"><i class="fas fa-circle"></i> Available for work</span>
+        <h1>Alex Rivera <span class="highlight">Full Stack Architect</span></h1>
+        <div class="typed-text"><span id="typed"></span></div>
+        <p style="margin: 1rem 0 1.5rem 0; max-width: 500px;">Crafting high-performance web apps with React, Node & AI integrations. 7+ years of turning ideas into digital gold.</p>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <a href="#contact" class="btn btn-primary">Hire Me <i class="fas fa-arrow-right"></i></a>
+          <a href="#" id="resumeBtn" class="btn btn-outline"><i class="fas fa-download"></i> Resume (PDF)</a>
+        </div>
+        <div class="social-links" style="margin-top: 2rem;">
+          <a href="#"><i class="fab fa-github"></i></a>
+          <a href="#"><i class="fab fa-linkedin"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-dribbble"></i></a>
+        </div>
+      </div>
+      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Alex Rivera" class="profile-pic">
+    </div>
+  </section>
+
+  <!-- About Section with timeline + exp -->
+  <section id="about" style="background: var(--bg-secondary);">
+    <div class="container" data-aos="fade-right">
+      <h2 class="section-title">About Me</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 2rem;">
+        <div style="flex:2">
+          <p style="font-size:1.1rem; margin-bottom:1rem;">I'm a passionate developer and tech educator based in Austin, TX. I blend design thinking with clean code to build products that scale. I've led frontend teams at fintech startups and contributed to open-source.</p>
+          <div><strong>🎓 Education:</strong> M.Sc. Computer Science, Stanford University</div>
+          <div><strong>🏆 Achievements:</strong> GitHub Star, 3x Hackathon Winner, AWS Certified</div>
+          <div><strong>🌍 Languages:</strong> English, Spanish, Python (fluent in tech)</div>
+          <div><strong>⚡ Hobbies:</strong> Chess, 3D printing, open-source contributions</div>
+        </div>
+        <div style="flex:1; background: var(--card-bg); border-radius: 2rem; padding: 1.5rem; border:1px solid var(--border)">
+          <h3>Experience Timeline</h3>
+          <ul style="list-style: none;">
+            <li><i class="fas fa-briefcase"></i> 2023 - now: Lead FullStack @ InnovateX</li>
+            <li><i class="fas fa-briefcase"></i> 2020-2023: Senior React Dev @ FinScale</li>
+            <li><i class="fas fa-briefcase"></i> 2018-2020: Freelance Web Architect</li>
+          </ul>
+          <h3 style="margin-top:1rem">Certifications</h3>
+          <ul><li>AWS Solutions Architect</li><li>Meta React Certified</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section with animated bars & circular charts using CSS -->
+  <section id="skills">
+    <div class="container" data-aos="fade-up">
+      <h2 class="section-title">Technical Arsenal</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 3rem;">
+        <div style="flex:1">
+          <div class="skill-item" data-skill="90"><div class="skill-info"><span>React / Next.js</span><span>90%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:0%"></div></div></div>
+          <div class="skill-item" data-skill="85"><div class="skill-info"><span>Node.js / Express</span><span>85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill"></div></div></div>
+          <div class="skill-item" data-skill="88"><div class="skill-info"><span>Python / FastAPI</span><span>88%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill"></div></div></div>
+          <div class="skill-item" data-skill="78"><div class="skill-info"><span>TypeScript</span><span>78%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill"></div></div></div>
+          <div class="skill-item" data-skill="82"><div class="skill-info"><span>Tailwind / CSS</span><span>82%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill"></div></div></div>
+        </div>
+        <div style="flex:1; text-align:center">
+          <i class="fab fa-js" style="font-size:3rem; margin:0.5rem"></i>
+          <i class="fab fa-python" style="font-size:3rem; margin:0.5rem"></i>
+          <i class="fab fa-git-alt" style="font-size:3rem; margin:0.5rem"></i>
+          <i class="fas fa-database" style="font-size:3rem; margin:0.5rem"></i>
+          <p class="mt-2">Toolchain: Docker, Kubernetes, GraphQL, Prisma, Vite</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section with filter + search -->
+  <section id="projects" style="background: var(--bg-secondary);">
+    <div class="container" data-aos="fade-up">
+      <h2 class="section-title">Featured Projects</h2>
+      <div style="display: flex; gap:1rem; flex-wrap: wrap; margin-bottom: 2rem;">
+        <input type="text" id="projectSearch" placeholder="🔍 Search projects..." style="padding:0.7rem; border-radius:40px; border:1px solid var(--border); background: var(--bg-primary); color: var(--text-primary); flex:1">
+        <div id="filterButtons">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="react">React</button>
+          <button class="filter-btn" data-filter="ai">AI/ML</button>
+          <button class="filter-btn" data-filter="fullstack">FullStack</button>
+        </div>
+      </div>
+      <div class="project-grid" id="projectsContainer"></div>
+    </div>
+  </section>
+
+  <!-- Contact + map & integration -->
+  <section id="contact">
+    <div class="container" data-aos="zoom-in">
+      <h2 class="section-title">Let's Connect</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 2rem;">
+        <div style="flex:1">
+          <form id="contactForm">
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Email Address" required>
+            <textarea rows="4" placeholder="Project idea or message..."></textarea>
+            <button type="submit" class="btn btn-primary">Send Message <i class="fas fa-paper-plane"></i></button>
+            <p id="formFeedback" style="margin-top:0.5rem"></p>
+          </form>
+        </div>
+        <div style="flex:1">
+          <div><i class="fas fa-map-marker-alt"></i> Austin, TX / Remote worldwide</div>
+          <div><i class="fab fa-whatsapp"></i> +1 (555) 789-2345</div>
+          <div><i class="fas fa-envelope"></i> alex.rivera@devportfolio.com</div>
+          <div style="margin-top:1rem"><iframe width="100%" height="180" style="border:0; border-radius:1rem" loading="lazy" src="https://maps.google.com/maps?q=Austin%2C%20Texas&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Carousel (simple) -->
+  <section style="background: var(--bg-secondary);">
+    <div class="container" data-aos="fade-up">
+      <h2 class="section-title">Kind Words</h2>
+      <div style="display: flex; gap:1.5rem; overflow-x: auto; padding:1rem 0;">
+        <div style="min-width:260px; background:var(--card-bg); border-radius:1.5rem; padding:1.5rem; border:1px solid var(--border)">⭐️⭐️⭐️⭐️⭐️ <br> "Alex built our entire dashboard in 3 weeks. incredible speed & quality." — Sarah, CTO</div>
+        <div style="min-width:260px; background:var(--card-bg); border-radius:1.5rem; padding:1.5rem; border:1px solid var(--border)">⭐️⭐️⭐️⭐️⭐️ <br> "Deep knowledge of fullstack & AI. Highly recommended." — Michael, Product Lead</div>
+        <div style="min-width:260px; background:var(--card-bg); border-radius:1.5rem; padding:1.5rem; border:1px solid var(--border)">⭐️⭐️⭐️⭐️ <br> "Clean code and great communication. Will hire again!" — Jessica, Founder</div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>
+  <p>© 2025 Alex Rivera — Built with ⚡ & glassmorphism. All features included: Dark mode, animations, resume download, skill bars, project filter.</p>
+</footer>
+<div class="floating-btn" id="scrollTopBtn"><i class="fas fa-arrow-up"></i></div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+<script>
+  // INIT AOS
+  AOS.init({ duration: 800, once: true });
+
+  // Typed Animation
+  new Typed('#typed', {
+    strings: ['Full Stack Architect', 'React & Node Expert', 'Open Source Advocate', 'Problem Solver'],
+    typeSpeed: 60,
+    backSpeed: 30,
+    loop: true
+  });
+
+  // Dark mode
+  const toggleBtn = document.getElementById('darkModeToggle');
+  toggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+  });
+  if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+
+  // Scroll progress bar
+  window.addEventListener('scroll', () => {
+    const winScroll = document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - window.innerHeight;
+    const scrolled = (winScroll / height) * 100;
+    document.getElementById('progressBar').style.width = scrolled + "%";
+  });
+
+  // Skill bars animation on view
+  const skillItems = document.querySelectorAll('.skill-item');
+  const animateSkills = () => {
+    skillItems.forEach(item => {
+      const rect = item.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 100 && !item.dataset.animated) {
+        const percent = item.getAttribute('data-skill');
+        const fill = item.querySelector('.skill-bar-fill');
+        if (fill) fill.style.width = percent + '%';
+        item.dataset.animated = 'true';
+      }
+    });
+  };
+  window.addEventListener('scroll', animateSkills);
+  animateSkills();
+
+  // Projects data (advanced)
+  const projectsData = [
+    { id:1, title:"AI Content Studio", desc:"Generative AI dashboard with GPT-4 integration", tech:"react,ai", demo:"#", github:"#", imgIcon:"fas fa-robot", category:"ai" },
+    { id:2, title:"Ecom Dash", desc:"Real-time analytics & inventory management", tech:"react,fullstack", demo:"#", github:"#", imgIcon:"fas fa-chart-line", category:"fullstack" },
+    { id:3, title:"Portfolio 3D", desc:"Three.js + WebGL interactive portfolio", tech:"react", demo:"#", github:"#", imgIcon:"fas fa-cube", category:"react" },
+    { id:4, title:"TaskFlow", desc:"Kanban with drag&drop, team collaboration", tech:"fullstack", demo:"#", github:"#", imgIcon:"fas fa-tasks", category:"fullstack" },
+    { id:5, title:"Face Detection API", desc:"ML model + Python backend", tech:"ai", demo:"#", github:"#", imgIcon:"fas fa-face-smile", category:"ai" }
+  ];
+  function renderProjects(filter = "all", search = "") {
+    let filtered = projectsData.filter(p => filter === "all" || p.category === filter);
+    if (search) filtered = filtered.filter(p => p.title.toLowerCase().includes(search.toLowerCase()) || p.desc.toLowerCase().includes(search.toLowerCase()));
+    const container = document.getElementById('projectsContainer');
+    if(!container) return;
+    container.innerHTML = filtered.map(proj => `
+      <div class="project-card" data-aos="fade-up">
+        <div class="project-img"><i class="${proj.imgIcon} fa-3x"></i></div>
+        <div class="project-content">
+          <h3>${proj.title}</h3>
+          <p>${proj.desc}</p>
+          <div>${proj.tech.split(',').map(t => `<span class="tech-tag">${t}</span>`).join('')}</div>
+          <div style="margin-top: 1rem; display:flex; gap:1rem;">
+            <a href="#" class="btn-outline" style="padding:0.3rem 1rem; font-size:0.8rem;">Live Demo</a>
+            <a href="#" class="btn-outline" style="padding:0.3rem 1rem; font-size:0.8rem;">GitHub</a>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+  renderProjects();
+  // Filter & search logic
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filterVal = btn.getAttribute('data-filter');
+      const searchVal = document.getElementById('projectSearch')?.value || '';
+      renderProjects(filterVal, searchVal);
+    });
+  });
+  document.getElementById('projectSearch')?.addEventListener('input', (e) => {
+    const activeFilter = document.querySelector('.filter-btn.active')?.getAttribute('data-filter') || 'all';
+    renderProjects(activeFilter, e.target.value);
+  });
+
+  // Resume download simulation
+  document.getElementById('resumeBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    alert("📄 Resume download started — (Alex_Rivera_Resume.pdf) [Demo mode]");
+    // create dummy download
+    const link = document.createElement('a');
+    link.href = "#";
+    link.download = "Alex_Rivera_Resume.pdf";
+    // just simulated alert
+  });
+
+  // Contact form (mock spam protection + alert)
+  const contactForm = document.getElementById('contactForm');
+  if(contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const feedback = document.getElementById('formFeedback');
+      feedback.innerHTML = "✨ Message sent! Alex will reply within 24h (demo).";
+      feedback.style.color = "#10b981";
+      contactForm.reset();
+      setTimeout(()=> feedback.innerHTML = "", 3000);
+    });
+  }
+
+  // floating scroll to top
+  const topBtn = document.getElementById('scrollTopBtn');
+  topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  // Visitor Counter simulation (local storage based)
+  if(!localStorage.getItem('visitorCount')) localStorage.setItem('visitorCount', 0);
+  let count = parseInt(localStorage.getItem('visitorCount'))+1;
+  localStorage.setItem('visitorCount', count);
+  const counterSpan = document.createElement('span');
+  counterSpan.style.fontSize = '0.7rem';
+  counterSpan.style.marginLeft = '1rem';
+  counterSpan.innerHTML = `👀 ${count} visits`;
+  document.querySelector('footer p')?.appendChild(counterSpan);
+
+  // lazy loading images? but we have only profile and icons. For simplicity all set.
+  // Add offline mode detection notification (optional)
+  window.addEventListener('load', () => {
+    if(!navigator.onLine) alert("You're offline — some features might be limited, but portfolio still works!");
+  });
+
+  // extra: custom cursor effect light (optional) - just for coolness - not intrusive
+  const cursor = document.createElement('div');
+  cursor.style.position = 'fixed';
+  cursor.style.width = '32px';
+  cursor.style.height = '32px';
+  cursor.style.borderRadius = '50%';
+  cursor.style.border = '2px solid var(--accent)';
+  cursor.style.pointerEvents = 'none';
+  cursor.style.zIndex = '9999';
+  cursor.style.transition = '0.05s linear';
+  document.body.appendChild(cursor);
+  document.addEventListener('mousemove', (e) => {
+    cursor.style.left = e.clientX - 16 + 'px';
+    cursor.style.top = e.clientY - 16 + 'px';
+  });
+  document.body.addEventListener('mouseleave', () => cursor.style.display = 'none');
+  document.body.addEventListener('mouseenter', () => cursor.style.display = 'block');
+</script>
+</body>
+</html>
